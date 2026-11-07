@@ -1,27 +1,69 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using MicrocursosUnivalle.Data;
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+var constructor = WebApplication.CreateBuilder(args);
 
-var app = builder.Build();
+// Cadena de conexión
+var cadenaConexion = constructor.Configuration.GetConnectionString("ConexionPrincipal")
+    ?? throw new InvalidOperationException("No se encontró la cadena de conexión 'ConexionPrincipal'.");
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+constructor.Services.AddDbContext<ApplicationDbContext>(opciones =>
+    opciones.UseSqlServer(cadenaConexion));
+
+constructor.Services.AddIdentity<IdentityUser, IdentityRole>(opciones =>
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    opciones.Password.RequireDigit = true;
+    opciones.Password.RequiredLength = 6;
+    opciones.Password.RequireNonAlphanumeric = false;
+    opciones.Password.RequireUppercase = false;
+    opciones.SignIn.RequireConfirmedAccount = false;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
+
+constructor.Services.ConfigureApplicationCookie(opciones =>
+{
+    opciones.LoginPath = "/Cuenta/Ingresar";
+    opciones.LogoutPath = "/Cuenta/Salir";
+    opciones.AccessDeniedPath = "/Cuenta/Denegado";
+});
+
+constructor.Services.AddControllersWithViews();
+constructor.Services.AddRazorPages();
+
+var aplicacion = constructor.Build();
+
+using (var ambito = aplicacion.Services.CreateScope())
+{
+    var servicios = ambito.ServiceProvider;
+    try
+    {
+        await MicrocursosUnivalle.Data.SeedData.InicializarRolesYAdmin(servicios);
+    }
+    catch (Exception ex)
+    {
+        var logger = servicios.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Error al inicializar la base de datos.");
+    }
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+if (!aplicacion.Environment.IsDevelopment())
+{
+    aplicacion.UseExceptionHandler("/Home/Error");
+    aplicacion.UseHsts();
+}
 
-app.UseRouting();
+aplicacion.UseHttpsRedirection();
+aplicacion.UseStaticFiles();
+aplicacion.UseRouting();
+aplicacion.UseAuthentication();
+aplicacion.UseAuthorization();
 
-app.UseAuthorization();
-
-app.MapControllerRoute(
+aplicacion.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.Run();
+aplicacion.MapRazorPages();
+
+aplicacion.Run();
