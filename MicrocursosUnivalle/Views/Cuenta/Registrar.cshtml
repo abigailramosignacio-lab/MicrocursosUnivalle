@@ -1,0 +1,76 @@
+﻿@model MicrocursosUnivalle.ModelosVista.RegistrarVM
+@{
+    ViewData["Title"] = "Registrarse";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card border-0 shadow">
+                <div class="card-header text-center py-3" style="background: linear-gradient(135deg, var(--guindo-oscuro), var(--guindo-medio)); border-bottom: 3px solid var(--dorado);">
+                    <h3 class="mb-0" style="color: var(--dorado-claro);">
+                        <i class="fas fa-user-plus me-2"></i>Crear cuenta
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Registrar" method="post">
+                        @Html.AntiForgeryToken()
+                        @if (ViewData.ModelState.ErrorCount > 0)
+                        {
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger small"></div>
+                        }
+
+                        <div class="mb-3">
+                            <label asp-for="Correo" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="background: var(--guindo-oscuro); color: white;">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                                <input asp-for="Correo" class="form-control" placeholder="correo@ejemplo.com" />
+                            </div>
+                            <span asp-validation-for="Correo" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Contrasena" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="background: var(--guindo-oscuro); color: white;">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input asp-for="Contrasena" class="form-control" placeholder="Mínimo 6 caracteres" />
+                            </div>
+                            <span asp-validation-for="Contrasena" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="ConfirmarContrasena" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="background: var(--guindo-oscuro); color: white;">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input asp-for="ConfirmarContrasena" class="form-control" placeholder="Repite tu contraseña" />
+                            </div>
+                            <span asp-validation-for="ConfirmarContrasena" class="text-danger small"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-guindo w-100 py-2">
+                            <i class="fas fa-user-plus me-2"></i>Crear cuenta
+                        </button>
+                    </form>
+                </div>
+                <div class="card-footer text-center py-3">
+                    <span class="text-muted">¿Ya tienes cuenta?</span>
+                    <a asp-controller="Cuenta" asp-action="Ingresar" style="color: var(--guindo-medio); font-weight: 600;">
+                        Ingresar aquí
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
