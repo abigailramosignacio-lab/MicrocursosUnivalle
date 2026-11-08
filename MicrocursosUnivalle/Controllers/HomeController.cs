@@ -25,6 +25,18 @@ namespace MicrocursosUnivalle.Controllers
             return View(cursos);
         }
 
+        // Detalle público de un curso
+        public async Task<IActionResult> Detalle(int id)
+        {
+            var curso = await _contexto.Cursos
+                .Include(c => c.Lecciones.OrderBy(l => l.Orden))
+                .FirstOrDefaultAsync(c => c.Id == id && c.Publicado);
+
+            if (curso == null) return NotFound();
+
+            return View(curso);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
