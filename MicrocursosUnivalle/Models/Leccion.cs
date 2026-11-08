@@ -1,28 +1,37 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using static System.Collections.Specialized.BitVector32;
 
 namespace MicrocursosUnivalle.Models
 {
-    public class LeccionCompletada
+    public class Leccion
     {
         public int Id { get; set; }
 
-        [Display(Name = "Fecha de completado")]
-        public DateTime FechaCompletado { get; set; } = DateTime.Now;
+        [Required(ErrorMessage = "El título de la lección es obligatorio.")]
+        [StringLength(200)]
+        [Display(Name = "Título")]
+        public string Titulo { get; set; } = string.Empty;
 
-        // FK Inscripcion
-        [Required]
-        public int InscripcionId { get; set; }
+        [Required(ErrorMessage = "El contenido es obligatorio.")]
+        [Display(Name = "Contenido")]
+        public string Contenido { get; set; } = string.Empty;
 
-        [ForeignKey("InscripcionId")]
-        public Inscripcion? Inscripcion { get; set; }
+        [Display(Name = "Orden")]
+        [Range(1, 9999)]
+        public int Orden { get; set; } = 1;
 
-        // FK Leccion
-        [Required]
-        public int LeccionId { get; set; }
+        [Display(Name = "Duración (minutos)")]
+        [Range(1, 600)]
+        public int DuracionMinutos { get; set; } = 10;
 
-        [ForeignKey("LeccionId")]
-        public Leccion? Leccion { get; set; }
+        // FK
+        [Display(Name = "Curso")]
+        public int CursoId { get; set; }
+
+        [ForeignKey("CursoId")]
+        public Curso? Curso { get; set; }
+
+        // Navegación
+        public ICollection<LeccionCompletada> LeccionesCompletadas { get; set; } = new List<LeccionCompletada>();
     }
 }
