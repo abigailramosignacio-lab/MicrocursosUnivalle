@@ -1,0 +1,65 @@
+@model IEnumerable<MicrocursosUnivalle.Models.Inscripcion>
+@{
+    ViewData["Title"] = "Mis Cursos";
+}
+
+<div class="container py-4">
+    <h2 class="seccion-titulo">
+        <i class="fas fa-book-open me-2"></i>Mis Cursos Inscritos
+    </h2>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+            <i class="fas fa-book" style="font-size: 4rem; color: var(--gris-medio);"></i>
+            <h5 class="mt-3 text-muted">Aún no estás inscrito en ningún curso</h5>
+            <p class="text-muted">Explora el catálogo y comienza a aprender hoy.</p>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-guindo mt-2">
+                <i class="fas fa-search me-2"></i>Ver catálogo de cursos
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var inscripcion in Model)
+            {
+                var totalLecciones = inscripcion.Curso?.Lecciones.Count ?? 0;
+                <div class="col">
+                    <div class="tarjeta-curso card h-100">
+                        <div class="card-header">
+                            <h5>@inscripcion.Curso?.Titulo</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex gap-2 mb-3 flex-wrap">
+                                <span class="badge-nivel badge-@inscripcion.Curso?.Nivel.ToLower()">
+                                    @inscripcion.Curso?.Nivel
+                                </span>
+                                <span class="badge bg-secondary">
+                                    <i class="fas fa-clock me-1"></i>@inscripcion.Curso?.DuracionHoras h
+                                </span>
+                                <span class="badge bg-info text-dark">
+                                    <i class="fas fa-list me-1"></i>@totalLecciones lecciones
+                                </span>
+                            </div>
+                            <p class="text-muted small">
+                                <i class="fas fa-calendar me-1"></i>
+                                Inscrito el @inscripcion.FechaInscripcion.ToString("dd/MM/yyyy")
+                            </p>
+                        </div>
+                        <div class="card-footer d-flex gap-2">
+                            <a asp-action="VerCurso" asp-route-id="@inscripcion.CursoId"
+                               class="btn btn-guindo btn-sm flex-grow-1">
+                                <i class="fas fa-play me-1"></i>Continuar
+                            </a>
+                            <a asp-action="MiProgreso" asp-route-idCurso="@inscripcion.CursoId"
+                               class="btn btn-outline-guindo btn-sm">
+                                <i class="fas fa-chart-bar"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
