@@ -1,26 +1,28 @@
-using MicrocursosUnivalle.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MicrocursosUnivalle.Data;
+using MicrocursosUnivalle.Models;
 using System.Diagnostics;
 
 namespace MicrocursosUnivalle.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _contexto;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext contexto)
         {
-            _logger = logger;
+            _contexto = contexto;
         }
 
-        public IActionResult Index()
+        // Página principal: catálogo de cursos publicados
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
+            var cursos = await _contexto.Cursos
+                .Where(c => c.Publicado)
+                .OrderByDescending(c => c.FechaCreacion)
+                .ToListAsync();
+            return View(cursos);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
