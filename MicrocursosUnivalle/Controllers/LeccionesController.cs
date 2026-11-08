@@ -16,7 +16,6 @@ namespace MicrocursosUnivalle.Controllers
             _contexto = contexto;
         }
 
-        // Listar lecciones de un curso
         public async Task<IActionResult> Index(int cursoId)
         {
             var curso = await _contexto.Cursos
@@ -29,7 +28,6 @@ namespace MicrocursosUnivalle.Controllers
             return View(curso.Lecciones.OrderBy(l => l.Orden).ToList());
         }
 
-        // GET: Crear lección
         public async Task<IActionResult> Crear(int cursoId)
         {
             var curso = await _contexto.Cursos.FindAsync(cursoId);
@@ -40,7 +38,6 @@ namespace MicrocursosUnivalle.Controllers
             return View(leccion);
         }
 
-        // POST: Crear lección
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Crear(Leccion leccion)
@@ -56,7 +53,6 @@ namespace MicrocursosUnivalle.Controllers
             return View(leccion);
         }
 
-        // GET: Editar lección
         public async Task<IActionResult> Editar(int id)
         {
             var leccion = await _contexto.Lecciones
@@ -68,7 +64,6 @@ namespace MicrocursosUnivalle.Controllers
             return View(leccion);
         }
 
-        // POST: Editar lección
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Editar(int id, Leccion leccion)
@@ -86,7 +81,6 @@ namespace MicrocursosUnivalle.Controllers
             return View(leccion);
         }
 
-        // GET: Eliminar lección
         public async Task<IActionResult> Eliminar(int id)
         {
             var leccion = await _contexto.Lecciones
@@ -97,7 +91,6 @@ namespace MicrocursosUnivalle.Controllers
             return View(leccion);
         }
 
-        // POST: Eliminar confirmado
         [HttpPost, ActionName("Eliminar")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EliminarConfirmado(int id)
