@@ -70,5 +70,43 @@ namespace MicrocursosUnivalle.Controllers
             TempData["Exito"] = "¡Te has inscrito correctamente al curso!";
             return RedirectToAction("VerCurso", new { id = idCurso });
         }
+
+        // Ver curso con lecciones (solo si está inscrito)
+        public async Task<IActionResult> VerCurso(int id)
+        {
+            var idUsuario = _gestorUsuarios.GetUserId(User)!;
+
+            var curso = await _contexto.Cursos
+                .Include(c => c.Lecciones.OrderBy(l => l.Orden))
+                .FirstOrDefaultAsync(c => c.Id == id && c.Publicado);
+
+            if (curso == null) return NotFound();
+
+            // Verificación en servidor: el usuario debe estar inscrito
+            var inscripcion = await _contexto.Inscripciones
+                .FirstOrDefaultAsync(i => i.UsuarioId == idUsuario && i.CursoId == id);
+
+            if (inscripcion == null)
+            {
+                TempData["Error"] = "Debes inscribirte al curso para ver las lecciones.";
+                return RedirectToAction("Detalle", "Home", new { id });
+            }
+
+            var idsCompletadas = await _contexto.LeccionesCompletadas
+                .Where(lc => lc.InscripcionId == inscripcion.Id)
+                .Select(lc => lc.LeccionId)
+                .ToListAsync();
+
+            var modelo = new DetalleCursoVM
+            {
+                Curso = curso,
+                EstaInscrito = true,
+                InscripcionId = inscripcion.Id,
+                Lecciones = curso.Lecciones.OrderBy(l => l.Orden).ToList(),
+                LeccionesCompletadasIds = idsCompletadas
+            };
+
+            return View(modelo);
+        }
     }
 }
