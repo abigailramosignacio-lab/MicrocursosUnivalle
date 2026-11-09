@@ -40,6 +40,7 @@ using (var ambito = aplicacion.Services.CreateScope())
     try
     {
         await MicrocursosUnivalle.Data.SeedData.InicializarRolesYAdmin(servicios);
+        await MicrocursosUnivalle.Data.SeedData.InicializarDatosEjemplo(servicios);
     }
     catch (Exception ex)
     {
