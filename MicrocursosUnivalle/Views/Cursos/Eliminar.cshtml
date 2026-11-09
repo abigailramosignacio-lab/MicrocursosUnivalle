@@ -1,6 +1,44 @@
-﻿namespace MicrocursosUnivalle.Views.Cursos
-{
-    public class Eliminar
-    {
-    }
+﻿@model MicrocursosUnivalle.Models.Curso
+@{
+    ViewData["Title"] = "Eliminar Curso";
 }
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow border-danger">
+                <div class="card-header py-3" style="background: #dc3545; color: white;">
+                    <h4 class="mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Confirmar Eliminación
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <p class="lead">¿Estás seguro de que deseas eliminar el siguiente curso?</p>
+                    <div class="alert alert-guindo">
+                        <h5><i class="fas fa-book me-2"></i>@Model.Titulo</h5>
+                        <ul class="mb-0 mt-2">
+                            <li><strong>Nivel:</strong> @Model.Nivel</li>
+                            <li><strong>Duración:</strong> @Model.DuracionHoras horas</li>
+                            <li><strong>Lecciones:</strong> @Model.Lecciones.Count lecciones</li>
+                        </ul>
+                    </div>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        Esta acción eliminará también todas las lecciones e inscripciones asociadas. No se puede deshacer.
+                    </div>
+                    <form asp-action="Eliminar" asp-route-id="@Model.Id" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-danger px-4">
+                                <i class="fas fa-trash me-2"></i>Sí, eliminar
+                            </button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
