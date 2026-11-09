@@ -108,5 +108,34 @@ namespace MicrocursosUnivalle.Controllers
 
             return View(modelo);
         }
+
+        // Ver contenido de una lección (solo si está inscrito)
+        public async Task<IActionResult> VerLeccion(int idLeccion)
+        {
+            var idUsuario = _gestorUsuarios.GetUserId(User)!;
+
+            var leccion = await _contexto.Lecciones
+                .Include(l => l.Curso)
+                .FirstOrDefaultAsync(l => l.Id == idLeccion);
+
+            if (leccion == null) return NotFound();
+
+            // Verificación en servidor
+            var inscripcion = await _contexto.Inscripciones
+                .FirstOrDefaultAsync(i => i.UsuarioId == idUsuario && i.CursoId == leccion.CursoId);
+
+            if (inscripcion == null)
+            {
+                TempData["Error"] = "No tienes acceso a esta lección.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            var yaCompletada = await _contexto.LeccionesCompletadas
+                .AnyAsync(lc => lc.InscripcionId == inscripcion.Id && lc.LeccionId == idLeccion);
+
+            ViewBag.Inscripcion = inscripcion;
+            ViewBag.YaCompletada = yaCompletada;
+            return View(leccion);
+        }
     }
 }
