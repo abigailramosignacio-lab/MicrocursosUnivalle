@@ -120,6 +120,13 @@ namespace MicrocursosUnivalle.Controllers
 
             if (leccion == null) return NotFound();
 
+            // Fix: validar que el curso esté publicado
+            if (leccion.Curso == null || !leccion.Curso.Publicado)
+            {
+                TempData["Error"] = "Este curso ya no está disponible.";
+                return RedirectToAction("MisCursos");
+            }
+
             // Verificación en servidor
             var inscripcion = await _contexto.Inscripciones
                 .FirstOrDefaultAsync(i => i.UsuarioId == idUsuario && i.CursoId == leccion.CursoId);
