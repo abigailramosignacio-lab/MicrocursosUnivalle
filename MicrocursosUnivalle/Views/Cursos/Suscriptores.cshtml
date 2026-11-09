@@ -1,6 +1,64 @@
-﻿namespace MicrocursosUnivalle.Views.Cursos
-{
-    public class Suscriptores
-    {
-    }
+﻿@model MicrocursosUnivalle.Models.Curso
+@{
+    ViewData["Title"] = "Suscriptores del Curso";
 }
+
+<div class="container py-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index" style="color:var(--guindo-medio)">Cursos</a></li>
+            <li class="breadcrumb-item active">Suscriptores - @Model.Titulo</li>
+        </ol>
+    </nav>
+
+    <div class="panel-admin">
+        <h3><i class="fas fa-users me-2"></i>Suscriptores inscritos</h3>
+        <p class="mb-0" style="opacity: 0.8;">Curso: <strong>@Model.Titulo</strong></p>
+    </div>
+
+    <div class="mt-4">
+        @if (!Model.Inscripciones.Any())
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-user-slash" style="font-size: 4rem; color: var(--gris-medio);"></i>
+                <h5 class="mt-3 text-muted">Ningún suscriptor inscrito aún</h5>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table tabla-guindo table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Correo electrónico</th>
+                            <th>Fecha de inscripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int numero = 1;
+                        }
+                        @foreach (var inscripcion in Model.Inscripciones.OrderByDescending(i => i.FechaInscripcion))
+                        {
+                            <tr>
+                                <td>@numero</td>
+                                <td>
+                                    <i class="fas fa-user-circle me-2" style="color:var(--guindo-medio)"></i>
+                                    @inscripcion.Usuario?.Email
+                                </td>
+                                <td>@inscripcion.FechaInscripcion.ToString("dd/MM/yyyy HH:mm")</td>
+                            </tr>
+                            numero++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-muted small">Total: <strong>@Model.Inscripciones.Count</strong> suscriptores inscritos.</p>
+        }
+
+        <a asp-action="Index" class="btn btn-outline-guindo mt-2">
+            <i class="fas fa-arrow-left me-2"></i>Volver a cursos
+        </a>
+    </div>
+</div>
