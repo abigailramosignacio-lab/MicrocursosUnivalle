@@ -1,0 +1,77 @@
+@model MicrocursosUnivalle.ModelosVista.ProgresoVM
+@{
+    ViewData["Title"] = "Mi Progreso";
+}
+
+<div class="container py-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="MisCursos" style="color:var(--guindo-medio)">Mis Cursos</a></li>
+            <li class="breadcrumb-item active">Progreso — @Model.Curso.Titulo</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card border-0 shadow">
+                <div class="card-header py-3" style="background: linear-gradient(135deg, var(--guindo-oscuro), var(--guindo-medio)); border-bottom: 3px solid var(--dorado);">
+                    <h4 class="mb-0" style="color: var(--dorado-claro);">
+                        <i class="fas fa-chart-bar me-2"></i>Mi Progreso
+                    </h4>
+                </div>
+                <div class="card-body p-4 text-center">
+                    <h5 class="mb-4" style="color: var(--guindo-oscuro);">@Model.Curso.Titulo</h5>
+
+                    <!-- Círculo de progreso -->
+                    <div class="mb-4">
+                        <div class="card-estadistica d-inline-block px-5 py-4" style="border: 3px solid var(--guindo-medio); border-radius: 50%; width: 160px; height: 160px; display: flex !important; align-items: center; justify-content: center; flex-direction: column;">
+                            <div class="numero">@Model.PorcentajeProgreso%</div>
+                            <div class="etiqueta">Completado</div>
+                        </div>
+                    </div>
+
+                    <!-- Barra de progreso -->
+                    <div class="progress progreso-guindo mb-3" style="height: 20px; border-radius: 10px;">
+                        <div class="progress-bar" role="progressbar"
+                             style="width: @Model.PorcentajeProgreso%; border-radius: 10px;"
+                             aria-valuenow="@Model.PorcentajeProgreso"
+                             aria-valuemin="0"
+                             aria-valuemax="100">
+                            @Model.PorcentajeProgreso%
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-2">
+                        <div class="col-4">
+                            <div class="card-estadistica" style="background: var(--crema);">
+                                <div class="numero" style="font-size: 1.8rem;">@Model.TotalLecciones</div>
+                                <div class="etiqueta">Total lecciones</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card-estadistica" style="background: #f0fff4;">
+                                <div class="numero" style="font-size: 1.8rem; color: #28a745;">@Model.LeccionesCompletadas</div>
+                                <div class="etiqueta">Completadas</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card-estadistica" style="background: var(--crema);">
+                                <div class="numero" style="font-size: 1.8rem; color: var(--guindo-medio);">@(Model.TotalLecciones - Model.LeccionesCompletadas)</div>
+                                <div class="etiqueta">Pendientes</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 justify-content-center mt-4">
+                        <a asp-action="VerCurso" asp-route-id="@Model.Curso.Id" class="btn btn-guindo">
+                            <i class="fas fa-play me-2"></i>Continuar aprendiendo
+                        </a>
+                        <a asp-action="MisCursos" class="btn btn-outline-guindo">
+                            <i class="fas fa-arrow-left me-2"></i>Mis cursos
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

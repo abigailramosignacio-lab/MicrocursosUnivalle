@@ -137,5 +137,63 @@ namespace MicrocursosUnivalle.Controllers
             ViewBag.YaCompletada = yaCompletada;
             return View(leccion);
         }
+
+        // POST: Marcar lección como completada
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MarcarCompletada(int idInscripcion, int idLeccion)
+        {
+            var idUsuario = _gestorUsuarios.GetUserId(User)!;
+
+            // Verificación en servidor: la inscripción debe pertenecer al usuario
+            var inscripcion = await _contexto.Inscripciones
+                .FirstOrDefaultAsync(i => i.Id == idInscripcion && i.UsuarioId == idUsuario);
+
+            if (inscripcion == null) return Forbid();
+
+            bool yaExiste = await _contexto.LeccionesCompletadas
+                .AnyAsync(lc => lc.InscripcionId == idInscripcion && lc.LeccionId == idLeccion);
+
+            if (!yaExiste)
+            {
+                var completada = new LeccionCompletada
+                {
+                    InscripcionId = idInscripcion,
+                    LeccionId = idLeccion,
+                    FechaCompletado = DateTime.Now
+                };
+                _contexto.LeccionesCompletadas.Add(completada);
+                await _contexto.SaveChangesAsync();
+            }
+
+            return RedirectToAction("VerCurso", new { id = inscripcion.CursoId });
+        }
+
+        // Ver progreso de un curso
+        public async Task<IActionResult> MiProgreso(int idCurso)
+        {
+            var idUsuario = _gestorUsuarios.GetUserId(User)!;
+
+            var inscripcion = await _contexto.Inscripciones
+                .Include(i => i.LeccionesCompletadas)
+                .FirstOrDefaultAsync(i => i.UsuarioId == idUsuario && i.CursoId == idCurso);
+
+            if (inscripcion == null) return RedirectToAction("MisCursos");
+
+            var curso = await _contexto.Cursos
+                .Include(c => c.Lecciones)
+                .FirstOrDefaultAsync(c => c.Id == idCurso);
+
+            if (curso == null) return NotFound();
+
+            var modelo = new ProgresoVM
+            {
+                Curso = curso,
+                TotalLecciones = curso.Lecciones.Count,
+                LeccionesCompletadas = inscripcion.LeccionesCompletadas.Count
+            };
+
+            return View(modelo);
+        }
     }
 }
