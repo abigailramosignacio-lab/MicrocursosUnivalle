@@ -1,22 +1,306 @@
-html {
-  font-size: 14px;
+/* =====================================================
+   Microcursos Univalle — Estilos globales
+   Paleta: guindo / borgoña + dorado
+   ===================================================== */
+
+/* Variables de color */
+:root {
+    --guindo-oscuro:   #4a0010;
+    --guindo-medio:    #7b0d1e;
+    --guindo-claro:    #a61c35;
+    --dorado:          #c9a84c;
+    --dorado-claro:    #f0d080;
+    --crema:           #fdf6ec;
+    --gris-medio:      #adb5bd;
+    --texto-medio:     #6c757d;
 }
 
-@media (min-width: 768px) {
-  html {
+/* Base */
+html {
     font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    background-color: #f8f9fa;
+    margin-bottom: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* =====================================================
+   NAVBAR
+   ===================================================== */
+.navbar-guindo {
+    background: linear-gradient(135deg, var(--guindo-oscuro), var(--guindo-medio));
+    border-bottom: 3px solid var(--dorado);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.navbar-guindo .navbar-brand {
+    color: var(--dorado-claro);
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.navbar-guindo .navbar-brand:hover {
+    color: #fff;
+}
+
+.navbar-guindo .nav-link {
+    color: rgba(255,255,255,0.85);
+    transition: color 0.2s;
+}
+
+.navbar-guindo .nav-link:hover,
+.navbar-guindo .nav-link.active {
+    color: var(--dorado-claro);
+}
+
+.navbar-guindo .navbar-toggler {
+    border-color: rgba(255,255,255,0.4);
+}
+
+.navbar-guindo .navbar-toggler-icon {
+    filter: invert(1);
+}
+
+.navbar-guindo .dropdown-menu {
+    border: 1px solid var(--guindo-claro);
+    border-top: 3px solid var(--dorado);
+}
+
+.navbar-guindo .dropdown-item:hover {
+    background-color: var(--crema);
+    color: var(--guindo-medio);
+}
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+.footer-guindo {
+    background: linear-gradient(135deg, var(--guindo-oscuro), var(--guindo-medio));
+    border-top: 3px solid var(--dorado);
+    color: rgba(255,255,255,0.85);
+}
+
+/* =====================================================
+   HERO
+   ===================================================== */
+.hero-guindo {
+    background: linear-gradient(135deg, var(--guindo-oscuro) 0%, var(--guindo-medio) 60%, var(--guindo-claro) 100%);
+    color: #fff;
+    padding: 4rem 0;
+    border-bottom: 4px solid var(--dorado);
+    text-align: center;
+}
+
+.hero-guindo h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--dorado-claro);
+    text-shadow: 1px 2px 6px rgba(0,0,0,0.4);
+}
+
+/* =====================================================
+   BOTONES
+   ===================================================== */
+.btn-guindo {
+    background-color: var(--guindo-medio);
+    color: #fff;
+    border: none;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-guindo:hover {
+    background-color: var(--guindo-oscuro);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.btn-guindo:active {
+    transform: translateY(0);
+}
+
+.btn-outline-guindo {
+    border: 2px solid var(--guindo-medio);
+    color: var(--guindo-medio);
+    background: transparent;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-outline-guindo:hover {
+    background-color: var(--guindo-medio);
+    color: #fff;
+}
+
+.btn-dorado {
+    background-color: var(--dorado);
+    color: var(--guindo-oscuro);
+    font-weight: 600;
+    border: none;
+}
+
+.btn-dorado:hover {
+    background-color: var(--dorado-claro);
+    color: var(--guindo-oscuro);
+}
+
+/* =====================================================
+   TARJETAS DE CURSO
+   ===================================================== */
+.tarjeta-curso {
+    border: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: box-shadow 0.25s, transform 0.25s;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.tarjeta-curso:hover {
+    box-shadow: 0 6px 20px rgba(123,13,30,0.18);
+    transform: translateY(-3px);
+}
+
+.tarjeta-curso .card-header {
+    background: linear-gradient(135deg, var(--guindo-oscuro), var(--guindo-medio));
+    border-bottom: 3px solid var(--dorado);
+    color: var(--dorado-claro);
+    padding: 1rem 1.25rem;
+}
+
+.tarjeta-curso .card-header h5 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.tarjeta-curso .card-footer {
+    background-color: var(--crema);
+    border-top: 1px solid #e9ecef;
+}
+
+/* =====================================================
+   BADGES DE NIVEL
+   ===================================================== */
+.badge-nivel {
+    padding: 0.35em 0.75em;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.badge-básico,
+.badge-basico {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.badge-intermedio {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.badge-avanzado {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* =====================================================
+   LECCIONES
+   ===================================================== */
+.leccion-item {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid #e9ecef;
+    transition: background-color 0.15s;
+}
+
+.leccion-item:last-child {
+    border-bottom: none;
+}
+
+.leccion-item:hover {
+    background-color: var(--crema);
+}
+
+.leccion-item.completada {
+    background-color: #f0fff4;
+}
+
+/* =====================================================
+   PROGRESO
+   ===================================================== */
+.progreso-guindo .progress-bar {
+    background: linear-gradient(90deg, var(--guindo-medio), var(--guindo-claro));
+}
+
+/* =====================================================
+   ESTADÍSTICAS / CARDS DE DATOS
+   ===================================================== */
+.card-estadistica {
+    background: var(--crema);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.card-estadistica .numero {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--guindo-medio);
+    line-height: 1.1;
+}
+
+.card-estadistica .etiqueta {
+    font-size: 0.8rem;
+    color: var(--texto-medio);
+    margin-top: 0.25rem;
+}
+
+/* =====================================================
+   TÍTULOS DE SECCIÓN
+   ===================================================== */
+.seccion-titulo {
+    color: var(--guindo-oscuro);
+    font-weight: 600;
+    border-bottom: 2px solid var(--dorado);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+/* =====================================================
+   CONTENIDO DE LECCIÓN (HTML renderizado)
+   ===================================================== */
+.contenido-leccion h2,
+.contenido-leccion h3 {
+    color: var(--guindo-oscuro);
+    margin-top: 1.5rem;
+}
+
+.contenido-leccion pre {
+    background: #f4f4f8;
+    border-left: 4px solid var(--guindo-medio);
+    padding: 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.contenido-leccion code {
+    color: var(--guindo-claro);
+    font-size: 0.9em;
+}
+
+.contenido-leccion pre code {
+    color: #333;
+}
+
+/* =====================================================
+   FOCUS (accesibilidad)
+   ===================================================== */
+.btn:focus,
+.btn:active:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.15rem rgba(123,13,30,0.35);
+    outline: none;
 }
